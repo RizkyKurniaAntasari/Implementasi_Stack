@@ -1,56 +1,49 @@
-//infix to postfix test (status FAIL)
-#include <bits/stdc++.h>
 #include <iostream>
-#include <string>
 #include <stack>
+#include <string>
 using namespace std;
 
-int precedence(char c){
-    if (c=='/' || c=='*'){
-        return 2;
-    } else if (c=='-'||c=='+'){
-        return 1;
-    }else {
-        return -1;
-    }
-}
-
-void intopost(string s){
-    stack <char> st;
-    string result;
+int evaluatePostfix(string infix){
+    stack <int> st;
     
-    for (int i=0; i < s.length();i++){
-        char c = s[i];
-        if (c>='0'&& c<='9'){
-            result +=c;
-        }else if (c=='('){
-            st.push('(');
-        }else if (c==')'){
-            while (st.top()!='('){
-                result += st.top();
-                st.pop();
+    for (int i=0;infix[i];i++){
+        if(infix[i]==' '){
+            continue;
+        }else if (isdigit(infix[i])){
+            int num=0;
+            while(isdigit(infix[i])){
+                num=num*10+(int)(infix[i]-'0');
+                i++;
             }
-            st.pop();
+            i--;
+            st.push(num);
         }else{
-            while (!st.empty() && precedence(s[i]) < precedence(st.top()) || !st.empty() && precedence(s[i]) == precedence(st.top())){
-                result += st.top();
-                st.pop();
+            int val1=st.top();
+            st.pop();
+            int val2=st.top();
+            st.pop();
+            switch(infix[i]){
+                case '+':
+                st.push(val2+val1);
+                break;
+                case '-':
+                st.push(val2-val1);
+                break;
+                case '*':
+                st.push(val2*val1);
+                break;
+                case '/':
+                st.push(val2/val1);
+                break;
             }
-            st.push(c);
         }
     }
-    while(!st.empty()){
-        result +=st.top();
-        st.pop();
-    }
-    cout << result << endl;
+    return st.top();
 }
 
 int main(){
     string infix;
-    cin>>infix;
-    cout<<intopost(infix);
+    getline(cin,infix);
+    cout<<evaluatePostfix(infix);
     return 0;
 }
-
-
