@@ -1,1 +1,9 @@
+#include <iostream>
+#include <string>
+#include <cctype>
 
+using namesapce std;
+int main(){
+
+  return 0;
+}
