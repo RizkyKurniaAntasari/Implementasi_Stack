@@ -5,88 +5,64 @@
 
 using namespace std;
 
-int precedence(char c){
-    if (c == '/' || c == '*' || c == '%') return 3;
-    else if (c =='+' || c == '-') return 4;
-    return 0;
+bool check(char ch, vector <char> range){
+    return find(range.begin(),range.end(), ch) != range.end();
 }
 
-bool IsOP(char s){
-    return (s == '/' || s == '*' || s == '%' || s == '-' || s == '+');
+bool checkString(string str,vector<string> range){
+    return find(range.begin(),range.end(), str) != range.end();
 }
 
 string removeWhitespace(string str){
+    vector<char>op = {'+','-','/','*','%','(',')'};
     string result;
-    for(char c : str){
-        if(!isspace(c)){
-            result.push_back(c);
+    for(char ch : str){
+        if(isdigit(ch) || check(ch,op)){
+            result.push_back(ch);
         }
     }
     return result;
 }
 
 vector<string> ToInfix(string s){
+    vector<char>op = {'+','/','*','%'};
+    vector<char> kurung ={'(',')'};
     vector<string> infix;
     string temp;
     
-    for(size_t i = 0; i < s.size(); i++){
-        if(isdigit(s[i]) || (s[i]=='-' && (i==0 || IsOP(s[i-1]) || s[i-1] == '('))){
+    for(size_t i = 0;i<s.size();++i){
+        if(isdigit(s[i])){
             temp.push_back(s[i]);
-            if(i+1 == s.size() || !isdigit(s[i+1])){
+            if(i==s.size()-1||!isdigit(s[i+1])){
                 infix.push_back(temp);
                 temp.clear();
             }
-        }// if besar
-        else if(IsOP(s[i]) || s[i] == "(" || s[i] == ")"){
-            if(!temp.empty()){
-             infix.push_back(temp);
-                temp.clear();
+        }else if(check(s[i],op)||check(s[i],kurung)){
+            temp.push_back(s[i]);
+            infix.push_back(temp);
+            temp.clear();
+        }else if(s[i]=='-'){
+            if(i==0||check(s[i-1],op)||s[i-1]=='('){
+                infix.push_back("-1");
+                infix.push_back("*");
+            }else if(isdigit(s[i+1])&&(i==0||!isdigit(s[i-1]))){
+                temp.push_back('-');
+            }else{
+                infix.push_back("-");
             }
-            infix.push_back(string(1,s[i]));
-        }
+        }  
     }
     return infix;
 }
 
-vector<string> ToPostfix(vector<string> infix){
-    stack<string> result;
-    vector<string> postfix;
-    
-    for(string t : infix){
-        if(isdigit(t[0]) ||(t.size() > 1 && t[0] == '-' && isdigit(t[1]))){
-            postfix.push_back(t);
-        }
-        else if(t=="("){
-            result.push(t);
-        }else if(t==")"){
-            while(!result.empty() && result.top() != "("){
-                postfix.push_back(result.top());
-                result.pop();
-            }
-            result.pop();
-        }
-        else{
-            while(!result.empty() && result.top()!='('&& precedence(t[0]) >=precedence(result.top()[0])){
-                postfix.push_back(result.top());
-                result.pop();
-            }
-            result.push(t);
-        }
-    }
-    while(!result.empty()){
-        postfix.push_back(result.top());
-        result.pop();
-    }
-    return postfix;
-}
        
 
 int main(){
 
     string input,hasil;
     getline(cin,input);
-    vector <string> infix = ToInfix(removeWhitespace(input));
-    vector<string> postfix = ToPostfix(infix);
+    //vector <string> infix = ToInfix(removeWhitespace(input));
+   // vector<string> postfix = ToPostfix(infix);
 
     
     
