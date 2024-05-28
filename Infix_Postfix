@@ -1,64 +1,31 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <stack>
+#include <string>
 
 using namespace std;
 
-bool is_OP(char op){
-    return op == '+' || op == '-' || op == '*' || op == '/';
+int precedence(char c){
+    if (c == '/' || c == '*') return 2;
+    else if (c =='+' || c == '-') return 1;
+    else return 0;
 }
 
-bool digit(char d){
-    return isdigit(d) ? true : false;
+bool IsOP(char c){
+    return isdigit(c);
 }
 
-int main() {
+string infixToPostfix(string s){
+    stack<char> st;
+    string postFix;
+}
 
-    stack <string> s;
-    string a;
-    string hasil;
-    
-    int i = 0;
-    getline(cin,a);
-    // 12 * 5 + 7    -(23+2)/5-4
-    // 12 5 * 7 +
-    // 12 5 * 7 + 23 2 + 5 / - 4 -
-    unsigned int len = a.length();
-//      while(len){
-//          char c = a[i];
-//          if(digit(c)){
-//              hasil += c;
-//          }
-            
-//          if(is_OP(c)){
-//              s.push(&c);
-//              hasil = " " + hasil;
-//          }
-         
-//         i++;
-//         len--;
-//      }
-    
-    for(int i = 0; i < len;i++){
-        char c = a[i];
-   
-        
-         if(digit(a[i+1]) && is_OP(c)){
-            char t = a[i+1];
-            char tm = c;
-            hasil = hasil + t + tm;
-        i++;
-        }
-          else    if(digit(c)){
-            hasil+=c;
-              //i++;
-        }
-    }
 
+int main(){
+
+    string input;
+    getline(cin,input);
     
     
-    cout << hasil;
-   // cout << len;
-    
-    
-    
-    return 0;
+
+return 0;
 }
