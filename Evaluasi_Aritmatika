@@ -1,3 +1,5 @@
+//untuk kode ini harus dipisah dengan spasi biar bisa keluar output.
+//fixnya di infixtopostfix setiap angka harus ditambah ' '
 #include <iostream>
 #include <stack>
 #include <string>
@@ -41,62 +43,8 @@ int evaluatePostfix(string infix){
     return st.top();
 }
 
-int prec(char c) {
-
-    if (c == '/' || c == '*')
-        return 2;
-    else if (c == '+' || c == '-')
-        return 1;
-    else
-        return -1;
-}
-
-void infixToPostfix(string s) {
-    stack<char> st;
-    string result;
-
-    for (int i = 0; i < s.length(); i++) {
-        char c = s[i];
-
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')){
-            result += c;
-            result += ' ';
-        }
-        else if (c == '('){
-            st.push('(');
-        }
-        else if (c == ')') {
-            while (st.top() != '(') {
-                result += st.top();
-                result += ' ';
-                st.pop();
-            }
-            st.pop();
-        }
-
-        else {
-            while (!st.empty() && prec(s[i]) < prec(st.top()) ||
-                   !st.empty() && prec(s[i]) == prec(st.top())) {
-                result += st.top();
-                result += ' ';
-                st.pop();
-            }
-            st.push(c);
-        }
-    }
-
-    while (!st.empty()) {
-        result += st.top();
-        result += ' ';
-        st.pop();
-    }
-
-    cout<<evaluatePostfix(result);
-}
-
 int main(){
-string exp;
-    getline(cin,exp);
-    infixToPostfix(exp);
-    return 0;
+    string input;
+    getline(cin,input);
+    cout<<evaluatePostfix(input);
 }
