@@ -17,7 +17,14 @@ bool IsOP(char c){
 string infixToPostfix(string s){
     stack<char> st;
     string postFix;
-}
+    
+    for(size_t i = 0; i < s.length(); i++){
+        if(IsOP(s[i])){
+            postFix += s[i];
+        }
+        
+    }// for
+}// function
 
 
 int main(){
