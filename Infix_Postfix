@@ -11,8 +11,8 @@ int precedence(char c){
 }
 
 bool IsOP(char c){
-    if(c != ' ' || c != isdigit(c)) return false;
-    return true;
+    if(c != ' ' || c != isdigit(c)) return true;
+    return false;
 }
 
 string removeWhitespace(string str){
@@ -32,62 +32,29 @@ vector<string> infixToPostfix(string s){
     for(size_t i = 0; i < s.size(); i++){
         if(isdigit(s[i]) || (s[i]=='-' && (i==0 || IsOP(s[i-1]) || s[i-1] == '('))){
             temp.push_back(s[i]);
-            
-        }
-        else if(s[i] == '('){
-            st.push('(');
-        }
-        else if(s[i] == ')'){
-            while(!st.empty() && st.top() != '('){
-                postFix += st.top();
-                st.pop();
+            if(i+1 == input.size() || !isdigit(input[i+1])){
+                infix.push_back(temp);
+                temp.clear();
             }
-            if(!st.empty()) st.pop();
-        }else{
-            while(!st.empty() && precedence(s[i]) <= precedence(st.top())){
-                postFix += st.top();
-                st.pop();
+        }// if besar
+        else if(IsOP(s[i]) || s[i] == '(' || s[i] == ')'){
+            if(!temp.empty()){
+             infix.push_back(temp);
+                temp.clear();
             }
-            st.push(s[i]);
+            infix.push_back(string(1,s[i]));
         }
     }
-    while(!st.empty()){
-        postFix += st.top();
-        st.pop();
-    }
-    return postFix;
+    return infix;
 }
-
+       
 
 int main(){
 
     string input,hasil;
       string f;
     getline(cin,input);
-    
-    if(input == "2+-(4 + 6)"){
-        cout << "2 -1 4 6 + * +";
-    }
-     
-    else{
-    hasil = infixToPostfix(input);
- 
-    int xx = 0;
-        unsigned long len = hasil.length();
-        for(unsigned long i = 0; i < len ;i++){
-            if(IsOP(hasil[i]) && xx < 2) {
-                xx++;
-                f+=hasil[i];
-            }
-            if( xx <=2 && IsOP(hasil[i]) ){
-                xx = 0;
-                xx++;
-                f = ' ' + hasil[i] + ' '; 
-            }
-        }
-        cout << f;
-    }
-    
+
     
 return 0;
 }
