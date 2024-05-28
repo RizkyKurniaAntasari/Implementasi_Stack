@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stack>
+#include <bits/stdc++.h>
 #include <string>
 
 using namespace std;
@@ -10,9 +11,8 @@ int precedence(char c){
     return 0;
 }
 
-bool IsOP(char c){
-    if(c != ' ' || c != isdigit(c)) return true;
-    return false;
+bool IsOP(char s){
+    return (s == '/' || s == '*' || s == '%' || s == '-' || s == '+');
 }
 
 string removeWhitespace(string str){
@@ -32,12 +32,12 @@ vector<string> ToInfix(string s){
     for(size_t i = 0; i < s.size(); i++){
         if(isdigit(s[i]) || (s[i]=='-' && (i==0 || IsOP(s[i-1]) || s[i-1] == '('))){
             temp.push_back(s[i]);
-            if(i+1 == input.size() || !isdigit(input[i+1])){
+            if(i+1 == s.size() || !isdigit(s[i+1])){
                 infix.push_back(temp);
                 temp.clear();
             }
         }// if besar
-        else if(IsOP(s[i]) || s[i] == '(' || s[i] == ')'){
+        else if(IsOP(s[i]) || s[i] == "(" || s[i] == ")"){
             if(!temp.empty()){
              infix.push_back(temp);
                 temp.clear();
@@ -52,21 +52,21 @@ vector<string> ToPostfix(vector<string> infix){
     stack<string> result;
     vector<string> postfix;
     
-    for(char t : infix){
+    for(string t : infix){
         if(isdigit(t[0]) ||(t.size() > 1 && t[0] == '-' && isdigit(t[1]))){
             postfix.push_back(t);
         }
-        else if(t=='('){
+        else if(t=="("){
             result.push(t);
-        }else if(t==')'){
-            while(!result.empty && result.top != '()'){
+        }else if(t==")"){
+            while(!result.empty() && result.top() != "("){
                 postfix.push_back(result.top());
                 result.pop();
             }
             result.pop();
         }
         else{
-            while(!result.empty() && result.top!='('&& percedence(t[0]) >=precendence(result.top()[0])){
+            while(!result.empty() && result.top()!='('&& precedence(t[0]) >=precedence(result.top()[0])){
                 postfix.push_back(result.top());
                 result.pop();
             }
@@ -84,9 +84,9 @@ vector<string> ToPostfix(vector<string> infix){
 int main(){
 
     string input,hasil;
-      string f;
     getline(cin,input);
-
+    vector <string> infix = ToInfix(removeWhitespace(input));
+    vector<string> postfix = ToPostfix(infix);
 
     
     
