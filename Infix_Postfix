@@ -30,9 +30,19 @@ string infixToPostfix(string s){
                 postFix += st.top();
                 st.pop();
             }
+            if(!st.empty()) st.pop();
+        }else{
+            while(!st.empty() && precedence(s[i]) <= precedence(st.top())){
+                postFix += st.top();
+                st.pop();
+            }
+            st.push(s[i]);
         }
-        
     }// for
+    while(!st.empty()){
+        postFix += st.top();
+        st.pop();
+    }
 }// function
 
 
