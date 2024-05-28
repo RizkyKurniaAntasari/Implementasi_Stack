@@ -25,7 +25,7 @@ string removeWhitespace(string str){
     return result;
 }
 
-vector<string> infixToPostfix(string s){
+vector<string> ToInfix(string s){
     vector<string> infix;
     string temp;
     
@@ -47,6 +47,38 @@ vector<string> infixToPostfix(string s){
     }
     return infix;
 }
+
+vector<string> ToPostfix(vector<string> infix){
+    stack<string> result;
+    vector<string> postfix;
+    
+    for(char t : infix){
+        if(isdigit(t[0]) ||(t.size() > 1 && t[0] == '-' && isdigit(t[1]))){
+            postfix.push_back(t);
+        }
+        else if(t=='('){
+            result.push(t);
+        }else if(t==')'){
+            while(!result.empty && result.top != '()'){
+                postfix.push_back(result.top());
+                result.pop();
+            }
+            result.pop();
+        }
+        else{
+            while(!result.empty() && result.top!='('&& percedence(t[0]) >=precendence(result.top()[0])){
+                postfix.push_back(result.top());
+                result.pop();
+            }
+            result.push(t);
+        }
+    }
+    while(!result.empty()){
+        postfix.push_back(result.top());
+        result.pop();
+    }
+    return postfix;
+}
        
 
 int main(){
@@ -55,6 +87,8 @@ int main(){
       string f;
     getline(cin,input);
 
+
+    
     
 return 0;
 }
