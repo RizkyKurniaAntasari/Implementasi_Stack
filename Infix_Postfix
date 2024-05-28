@@ -38,12 +38,13 @@ string infixToPostfix(string s){
             }
             st.push(s[i]);
         }
-    }// for
+    }
     while(!st.empty()){
         postFix += st.top();
         st.pop();
     }
-}// function
+    return postFix;
+}
 
 
 int main(){
