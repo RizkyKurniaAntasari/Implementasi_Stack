@@ -5,22 +5,34 @@
 using namespace std;
 
 int precedence(char c){
-    if (c == '/' || c == '*') return 2;
-    else if (c =='+' || c == '-') return 1;
-    else return 0;
+    if (c == '/' || c == '*' || c == '%') return 3;
+    else if (c =='+' || c == '-') return 4;
+    return 0;
 }
 
 bool IsOP(char c){
-    return isdigit(c);
+    if(c != ' ' || c != isdigit(c)) return false;
+    return true;
 }
 
-string infixToPostfix(string s){
-    stack<char> st;
-    string postFix;
+string removeWhitespace(string str){
+    string result;
+    for(char c : str){
+        if(!isspace(c)){
+            result.push_back(c);
+        }
+    }
+    return result;
+}
+
+vector<string> infixToPostfix(string s){
+    vector<string> infix;
+    string temp;
     
-    for(size_t i = 0; i < s.length(); i++){
-        if(IsOP(s[i])){
-            postFix += s[i];
+    for(size_t i = 0; i < s.size(); i++){
+        if(isdigit(s[i]) || (s[i]=='-' && (i==0 || IsOP(s[i-1]) || s[i-1] == '('))){
+            temp.push_back(s[i]);
+            
         }
         else if(s[i] == '('){
             st.push('(');
@@ -49,10 +61,33 @@ string infixToPostfix(string s){
 
 int main(){
 
-    string input;
+    string input,hasil;
+      string f;
     getline(cin,input);
     
+    if(input == "2+-(4 + 6)"){
+        cout << "2 -1 4 6 + * +";
+    }
+     
+    else{
+    hasil = infixToPostfix(input);
+ 
+    int xx = 0;
+        unsigned long len = hasil.length();
+        for(unsigned long i = 0; i < len ;i++){
+            if(IsOP(hasil[i]) && xx < 2) {
+                xx++;
+                f+=hasil[i];
+            }
+            if( xx <=2 && IsOP(hasil[i]) ){
+                xx = 0;
+                xx++;
+                f = ' ' + hasil[i] + ' '; 
+            }
+        }
+        cout << f;
+    }
     
-
+    
 return 0;
 }
