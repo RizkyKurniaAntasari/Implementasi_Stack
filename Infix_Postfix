@@ -22,6 +22,15 @@ string infixToPostfix(string s){
         if(IsOP(s[i])){
             postFix += s[i];
         }
+        else if(s[i] == '('){
+            st.push('(');
+        }
+        else if(s[i] == ')'){
+            while(!st.empty() && st.top() != '('){
+                postFix += st.top();
+                st.pop();
+            }
+        }
         
     }// for
 }// function
