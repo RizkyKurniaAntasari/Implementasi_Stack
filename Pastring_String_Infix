@@ -3,7 +3,41 @@
 #include <cctype>
 
 using namesapce std;
+bool isOperator(char a){
+    return a == '+' || a == '/' || a == '*' || a == '-' || a == '%' ;
+    }
+    
+bool isParanthesis(char a){
+    return a == '(' || a == ')';
+    }
+    
+bool isDigit(char a){
+    return a >= '0' && a <= '9';
+    }
+
+string Infix(string processedInput, size_t length){
+    string output;
+    if (processedInput[0] == '-' && processedInput[1] == '('){
+        output += "-1 *";
+    }
+    else{
+        output += processedInput[0];
+    }
+   return output; 
+}
+
 int main(){
+  string input, processedInput;
+    getline(cin, input);
+    
+    for (char c : input){
+        if (c != ' ') processedInput += c;
+    }
 
   return 0;
 }
+
+
+
+
+
