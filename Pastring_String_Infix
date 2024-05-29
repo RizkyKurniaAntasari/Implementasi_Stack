@@ -32,6 +32,12 @@ string Infix(string processedInput, size_t length){
         else if (isDigit(c)){
             output += c;
         }
+        else if (processedInput[i-1] == ')' && c == '-'){
+            output += " - ";
+        }
+        else if (isParenthesis(processedInput[i-1]) && c == '-'){
+            output += c;
+        }
     }
    return output; 
 }
@@ -43,6 +49,10 @@ int main(){
     for (char c : input){
         if (c != ' ') processedInput += c;
     }
+
+    size_t length = processedInput.length();
+    
+    cout << Infix(processedInput,length);
 
   return 0;
 }
