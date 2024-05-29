@@ -97,10 +97,12 @@ int main(){
 
     string input,hasil;
     getline(cin,input);
-    //vector <string> infix = ToInfix(removeWhitespace(input));
-   // vector<string> postfix = ToPostfix(infix);
-
+    vector <string> infix = ToInfix(removeWhitespace(input));
+    vector<string> postfix = ToPostfix(infix);
     
+    for(string t : postfix){
+        cout << t <<  ' ';
+    }
     
 return 0;
 }
