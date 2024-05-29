@@ -18,7 +18,7 @@ bool isDigit(char a){
 string Infix(string processedInput, size_t length){
     string output;
     if (processedInput[0] == '-' && processedInput[1] == '('){
-        output += "-1 *";
+        output += "-1 * ";
     }
     else{
         output += processedInput[0];
@@ -27,7 +27,7 @@ string Infix(string processedInput, size_t length){
     for(size_t i = 1; i < length; i++){
         char c = processedInput[i];
         if(c == '-' && isOperator(processedInput[i-1])){
-            output += "-1 *";
+            output += "-1 * ";
         }
         else if (isDigit(c)){
             output += c;
@@ -36,6 +36,18 @@ string Infix(string processedInput, size_t length){
             output += " - ";
         }
         else if (isParenthesis(processedInput[i-1]) && c == '-'){
+            output += c;
+        }
+        else if (c == '('){
+            output += "( ";
+        }
+        else if (c == ')'){
+            output += " )";
+        }
+        else if (isOperator(c)){
+            output += " " + string(1, c) + " ";
+        }
+        else{
             output += c;
         }
     }
