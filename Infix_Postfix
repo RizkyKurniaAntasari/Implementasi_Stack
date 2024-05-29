@@ -55,6 +55,40 @@ vector<string> ToInfix(string s){
     return infix;
 }
 
+vector<string> ToPostfix(vector<string> infix){
+    vector<char>op = {'+','-','/','*','%','(',')'};
+    stack<string> result;
+    vector<string> postfix;
+    
+    for(string t : infix){
+        if(t == "(") result.push(t);
+        else if(t ==")"){
+            while(!result.empty() && result.top() != "("){
+                postfix.push_back(result.top());
+                result.pop();
+            }
+            result.pop();
+        }
+        else if(checkString(t,op)){
+            while(!result.empty() && result.top() != "(" && checkPrecedence(t) >= checkPrecedence(result.top())){
+                postfix.push_back(result.top());
+                result.pop();
+            }
+            result.push(t);
+        }
+        else{
+            postfix.push_back(t);
+        }
+    }
+    while
+
+}
+
+int checkPrecedence(string op){
+    if (op == "%" || op == "*" || op == "/") return 3;
+    if (op == "-" || op == "+") return 4;
+    return 0;
+}
        
 
 int main(){
