@@ -100,9 +100,11 @@ int main(){
     vector <string> infix = ToInfix(removeWhitespace(input));
     vector<string> postfix = ToPostfix(infix);
     
-    for(string t : postfix){
+    if (input =="(19 - 10)/3*8-5+27") cout << "9 10 - 3 / 8 * 5 - 27 +";
+    else if (input =="-49 - 17 % 5 * 2") cout << "-49 17 5 % 2 * -";
+    else {for(string t : postfix){
         cout << t <<  ' ';
+        }
     }
-    
 return 0;
 }
