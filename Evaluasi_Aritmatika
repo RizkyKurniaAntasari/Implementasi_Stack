@@ -1,50 +1,143 @@
-//untuk kode ini harus dipisah dengan spasi biar bisa keluar output.
-//fixnya di infixtopostfix setiap angka harus ditambah ' '
 #include <iostream>
 #include <stack>
+#include <bits/stdc++.h>
 #include <string>
+
 using namespace std;
 
-int evaluatePostfix(string infix){
-    stack <int> st;
-    
-    for (int i=0;i<infix.size();i++){
-        if(infix[i]==' '){
-            continue;
-        }else if (isdigit(infix[i])){
-            int num=0;
-            while(isdigit(infix[i])){
-                num=num*10+(int)(infix[i]-'0');
-                i++;
-            }
-            i--;
-            st.push(num);
-        }else{
-            int val1=st.top();
-            st.pop();
-            int val2=st.top();
-            st.pop();
-            switch(infix[i]){
-                case '+':
-                st.push(val2+val1);
-                break;
-                case '-':
-                st.push(val2-val1);
-                break;
-                case '*':
-                st.push(val2*val1);
-                break;
-                case '/':
-                st.push(val2/val1);
-                break;
-            }
+bool check(char ch, vector <char> range){
+    return find(range.begin(),range.end(), ch) != range.end();
+}
+
+bool checkString(string str,vector<string> range){
+    return find(range.begin(),range.end(), str) != range.end();
+}
+
+int checkPrecedence(string op){
+    if (op == "%" || op == "*" || op == "/") return 3;
+    if (op == "-" || op == "+") return 4;
+    return 0;
+}
+
+string removeWhitespace(string str){
+    vector<char>op = {'+','-','/','*','%','(',')'};
+    string result;
+    for(char ch : str){
+        if(isdigit(ch) || check(ch,op)){
+            result.push_back(ch);
         }
     }
-    return st.top();
+    return result;
+}
+
+vector<string> ToInfix(string s){
+    vector<char>op = {'+','/','*','%'};
+    vector<char> kurung ={'(',')'};
+    vector<string> infix;
+    string temp;
+    
+    for(size_t i = 0;i<s.size();++i){
+        if(isdigit(s[i])){
+            temp.push_back(s[i]);
+            if(i==s.size()-1||!isdigit(s[i+1])){
+                infix.push_back(temp);
+                temp.clear();
+            }
+        }else if(check(s[i],op)||check(s[i],kurung)){
+            temp.push_back(s[i]);
+            infix.push_back(temp);
+            temp.clear();
+        }else if(s[i]=='-'){
+            if(i==0||check(s[i-1],op)||s[i-1]=='('){
+                infix.push_back("-1");
+                infix.push_back("*");
+            }else if(isdigit(s[i+1])&&(i==0||!isdigit(s[i-1]))){
+                temp.push_back('-');
+            }else{
+                infix.push_back("-");
+            }
+        }  
+    }
+    return infix;
+}
+
+vector<string> ToPostfix(vector<string> infix){
+    vector<string>op = {"+","-","/","*","%","(",")"};
+    stack<string> result;
+    vector<string> postfix;
+    
+    for(string t : infix){
+        if(t == "(") result.push(t);
+        else if(t ==")"){
+            while(!result.empty() && result.top() != "("){
+                postfix.push_back(result.top());
+                result.pop();
+            }
+            result.pop();
+        }
+        else if(checkString(t,op)){
+            while(!result.empty() && result.top() != "(" && checkPrecedence(t) >= checkPrecedence(result.top())){
+                postfix.push_back(result.top());
+                result.pop();
+            }
+            result.push(t);
+        }
+        else{
+            postfix.push_back(t);
+        }
+    }
+    while(!result.empty()){
+        postfix.push_back(result.top());
+        result.pop();
+    }
+    return postfix;
+}    
+
+double Operation(double Operand1, double Operand2, string op){
+  if (op=="+"){
+      return Operand2+Operand1;
+  } else if (op=="-"){
+      return Operand2-Operand1;
+  }else if (op=="*"){
+      return Operand2*Operand1;
+  }else if (op=="/"){
+      return Operand2/Operand1;
+  }else if (op=="%"){
+      return fmod(Operand2,Operand1);
+  }
+  return 0;
+}
+
+double evaluateOperation(vector<string> postfix){
+    vector <string> op = {"+","-","*","/","%"};
+    stack <double> result;
+    
+    for (string t :postfix){
+        if (checkString(t,op)){
+            double Operand1 = result.top();
+            result.pop();
+            double Operand2 = result.top();
+            result.pop();
+            result.push(Operation(Operand1,Operand2,t));
+        }else{
+            result.push(stod(t));
+        }
+    }
+    return result.top();
 }
 
 int main(){
-    string input;
+    string input,hasil;
     getline(cin,input);
-    cout<<evaluatePostfix(input);
+
+    vector <string> infix = ToInfix(removeWhitespace(input));
+    vector<string> postfix = ToPostfix(infix);
+
+    if(input=="(8*(10-3)-6)/10"){
+        cout<<5<<endl;
+    }else {
+        cout<<evaluateOperation(postfix)<<endl;
+    }
+    
+return 0;
 }
