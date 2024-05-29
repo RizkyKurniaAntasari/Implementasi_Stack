@@ -13,6 +13,12 @@ bool checkString(string str,vector<string> range){
     return find(range.begin(),range.end(), str) != range.end();
 }
 
+int checkPrecedence(string op){
+    if (op == "%" || op == "*" || op == "/") return 3;
+    if (op == "-" || op == "+") return 4;
+    return 0;
+}
+
 string removeWhitespace(string str){
     vector<char>op = {'+','-','/','*','%','(',')'};
     string result;
@@ -56,7 +62,7 @@ vector<string> ToInfix(string s){
 }
 
 vector<string> ToPostfix(vector<string> infix){
-    vector<char>op = {'+','-','/','*','%','(',')'};
+    vector<string>op = {"+","-","/","*","%","(",")"};
     stack<string> result;
     vector<string> postfix;
     
@@ -80,16 +86,12 @@ vector<string> ToPostfix(vector<string> infix){
             postfix.push_back(t);
         }
     }
-    while
-
-}
-
-int checkPrecedence(string op){
-    if (op == "%" || op == "*" || op == "/") return 3;
-    if (op == "-" || op == "+") return 4;
-    return 0;
-}
-       
+    while(!result.empty()){
+        postfix.push_back(result.top());
+        result.pop();
+    }
+    return postfix;
+}    
 
 int main(){
 
